@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LogiCompliance - WhatsApp Document Compliance System</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .landing-container {
+        text-align: center;
+        padding: 40px;
+      }
+
+      .logo {
+        font-size: 3rem;
+        color: white;
+        margin-bottom: 10px;
+      }
+
+      .logo-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+      }
+
+      .tagline {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.2rem;
+        margin-bottom: 50px;
+      }
+
+      .cards-container {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        width: 320px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+      }
+
+      .card-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+      }
+
+      .card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #333;
+      }
+
+      .card-description {
+        color: #666;
+        line-height: 1.6;
+        font-size: 0.95rem;
+      }
+
+      .dashboard-card .card-icon {
+        color: #667eea;
+      }
+
+      .whatsapp-card .card-icon {
+        color: #25d366;
+      }
+
+      .features {
+        margin-top: 60px;
+        color: white;
+      }
+
+      .features h3 {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+        opacity: 0.9;
+      }
+
+      .feature-list {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .feature-item {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 15px 25px;
+        border-radius: 30px;
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 768px) {
+        .cards-container {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .card {
+          width: 100%;
+          max-width: 320px;
+        }
+
+        .feature-list {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="landing-container">
+      <div class="logo-icon">📋</div>
+      <h1 class="logo">LogiCompliance</h1>
+      <p class="tagline">
+        WhatsApp-Based Document Compliance System for Logistics
+      </p>
+
+      <div class="cards-container">
+        <a href="dashboard.html" class="card dashboard-card">
+          <div class="card-icon">📊</div>
+          <h2 class="card-title">Admin Dashboard</h2>
+          <p class="card-description">
+            Monitor order status, track document compliance, manage incentives,
+            and assign follow-ups to team members.
+          </p>
+        </a>
+
+        <a href="whatsapp.html" class="card whatsapp-card">
+          <div class="card-icon">💬</div>
+          <h2 class="card-title">WhatsApp Interface</h2>
+          <p class="card-description">
+            Experience the patient/flebo view - receive instructions, upload
+            documents, and provide digital consent.
+          </p>
+        </a>
+      </div>
+
+      <div class="features">
+        <h3>Key Features</h3>
+        <div class="feature-list">
+          <div class="feature-item">📱 Multilingual Support</div>
+          <div class="feature-item">📷 Photo Document Upload</div>
+          <div class="feature-item">🔐 OTP-Based Consent</div>
+          <div class="feature-item">💰 Incentive Tracking</div>
+          <div class="feature-item">🔔 Automated Reminders</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WhatsApp - LogiCompliance</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #0b141a;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .phone-container {
+        width: 100%;
+        max-width: 420px;
+        height: 90vh;
+        max-height: 800px;
+        background: #111b21;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      /* WhatsApp Header */
+      .wa-header {
+        background: #202c33;
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 1px solid #2a3942;
+      }
+
+      .back-btn {
+        color: #00a884;
+        font-size: 1.3rem;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .contact-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+      }
+
+      .contact-info {
+        flex: 1;
+      }
+
+      .contact-name {
+        color: #e9edef;
+        font-weight: 500;
+        font-size: 1rem;
+      }
+
+      .contact-status {
+        color: #8696a0;
+        font-size: 0.8rem;
+      }
+
+      .header-icons {
+        display: flex;
+        gap: 20px;
+        color: #aebac1;
+        font-size: 1.2rem;
+      }
+
+      /* Language Selector */
+      .language-bar {
+        background: #182229;
+        padding: 10px 15px;
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+      }
+
+      .lang-btn {
+        padding: 6px 14px;
+        border-radius: 20px;
+        background: #2a3942;
+        color: #8696a0;
+        border: none;
+        cursor: pointer;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        transition: all 0.3s;
+      }
+
+      .lang-btn.active {
+        background: #00a884;
+        color: white;
+      }
+
+      /* Chat Area */
+      .chat-area {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="p" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23182229"/></pattern></defs><rect fill="url(%23p)" width="100" height="100"/></svg>');
+        background-color: #0b141a;
+      }
+
+      .message {
+        max-width: 85%;
+        margin-bottom: 10px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        position: relative;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message.received {
+        background: #202c33;
+        color: #e9edef;
+        border-top-left-radius: 0;
+        margin-right: auto;
+      }
+
+      .message.sent {
+        background: #005c4b;
+        color: #e9edef;
+        border-top-right-radius: 0;
+        margin-left: auto;
+      }
+
+      .message-time {
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.6);
+        text-align: right;
+        margin-top: 4px;
+      }
+
+      .message-time .tick {
+        color: #53bdeb;
+      }
+
+      /* System Message */
+      .system-message {
+        background: #182229;
+        color: #8696a0;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        text-align: center;
+        margin: 10px auto;
+        max-width: 80%;
+      }
+
+      /* Quick Reply Buttons */
+      .quick-replies {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .quick-reply-btn {
+        background: transparent;
+        border: 1px solid #00a884;
+        color: #00a884;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.3s;
+      }
+
+      .quick-reply-btn:hover {
+        background: #00a884;
+        color: white;
+      }
+
+      /* Document Upload Section */
+      .upload-section {
+        background: #182229;
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 10px;
+      }
+
+      .upload-title {
+        color: #00a884;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+      }
+
+      .upload-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      .upload-item {
+        background: #202c33;
+        border-radius: 10px;
+        padding: 15px 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: 2px dashed #2a3942;
+      }
+
+      .upload-item:hover {
+        border-color: #00a884;
+      }
+
+      .upload-item.uploaded {
+        border-color: #00a884;
+        border-style: solid;
+      }
+
+      .upload-item .icon {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+      }
+
+      .upload-item .label {
+        color: #8696a0;
+        font-size: 0.75rem;
+      }
+
+      .upload-item.uploaded .icon {
+        color: #00a884;
+      }
+
+      .upload-item.uploaded .label {
+        color: #00a884;
+      }
+
+      /* OTP Section */
+      .otp-section {
+        background: #182229;
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 10px;
+      }
+
+      .otp-title {
+        color: #e9edef;
+        font-size: 0.95rem;
+        margin-bottom: 15px;
+      }
+
+      .otp-input-group {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+
+      .otp-input {
+        width: 45px;
+        height: 50px;
+        border: 2px solid #2a3942;
+        border-radius: 10px;
+        background: #202c33;
+        color: #e9edef;
+        font-size: 1.3rem;
+        text-align: center;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+
+      .otp-input:focus {
+        border-color: #00a884;
+      }
+
+      .otp-timer {
+        color: #8696a0;
+        font-size: 0.85rem;
+        text-align: center;
+      }
+
+      .otp-timer span {
+        color: #00a884;
+      }
+
+      .verify-btn {
+        width: 100%;
+        padding: 12px;
+        background: #00a884;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 15px;
+        transition: background 0.3s;
+      }
+
+      .verify-btn:hover {
+        background: #008f72;
+      }
+
+      .verify-btn:disabled {
+        background: #2a3942;
+        cursor: not-allowed;
+      }
+
+      /* Image Preview */
+      .image-preview {
+        max-width: 200px;
+        border-radius: 10px;
+        margin-top: 8px;
+      }
+
+      /* Progress Indicator */
+      .progress-section {
+        background: #182229;
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 10px;
+      }
+
+      .progress-title {
+        color: #e9edef;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+      }
+
+      .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+      }
+
+      .progress-steps::before {
+        content: "";
+        position: absolute;
+        top: 15px;
+        left: 20px;
+        right: 20px;
+        height: 3px;
+        background: #2a3942;
+      }
+
+      .progress-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+      }
+
+      .step-circle {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #2a3942;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #8696a0;
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+      }
+
+      .step-circle.completed {
+        background: #00a884;
+        color: white;
+      }
+
+      .step-circle.active {
+        background: #00a884;
+        color: white;
+        box-shadow: 0 0 0 4px rgba(0, 168, 132, 0.3);
+      }
+
+      .step-label {
+        color: #8696a0;
+        font-size: 0.7rem;
+        text-align: center;
+      }
+
+      /* Input Area */
+      .input-area {
+        background: #202c33;
+        padding: 10px 15px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .input-icons {
+        display: flex;
+        gap: 15px;
+        color: #8696a0;
+        font-size: 1.3rem;
+      }
+
+      .input-icons span {
+        cursor: pointer;
+      }
+
+      .message-input {
+        flex: 1;
+        background: #2a3942;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 25px;
+        color: #e9edef;
+        font-size: 0.95rem;
+        outline: none;
+      }
+
+      .message-input::placeholder {
+        color: #8696a0;
+      }
+
+      .send-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: #00a884;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s;
+      }
+
+      .send-btn:hover {
+        background: #008f72;
+      }
+
+      /* Success Animation */
+      .success-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+      }
+
+      .success-overlay.active {
+        display: flex;
+      }
+
+      .success-content {
+        text-align: center;
+        color: white;
+      }
+
+      .success-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        animation: bounceIn 0.5s ease;
+      }
+
+      @keyframes bounceIn {
+        0% {
+          transform: scale(0);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .success-title {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+      }
+
+      .success-subtitle {
+        color: #8696a0;
+        font-size: 0.9rem;
+      }
+
+      /* Typing Indicator */
+      .typing-indicator {
+        display: flex;
+        gap: 4px;
+        padding: 12px 15px;
+      }
+
+      .typing-indicator span {
+        width: 8px;
+        height: 8px;
+        background: #8696a0;
+        border-radius: 50%;
+        animation: typing 1.4s infinite;
+      }
+
+      .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes typing {
+        0%,
+        60%,
+        100% {
+          transform: translateY(0);
+        }
+        30% {
+          transform: translateY(-5px);
+        }
+      }
+
+      /* Hidden file input */
+      .hidden-input {
+        display: none;
+      }
+
+      /* Demo Controls */
+      .demo-controls {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background: white;
+        padding: 15px 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        max-width: 280px;
+      }
+
+      .demo-controls h4 {
+        margin-bottom: 10px;
+        color: #333;
+      }
+
+      .demo-btn {
+        padding: 8px 15px;
+        margin: 5px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.3s;
+      }
+
+      .demo-btn.primary {
+        background: #00a884;
+        color: white;
+      }
+
+      .demo-btn.secondary {
+        background: #f0f0f0;
+        color: #333;
+      }
+
+      .demo-btn:hover {
+        transform: scale(1.05);
+      }
+
+      @media (max-width: 500px) {
+        .demo-controls {
+          display: none;
+        }
+
+        .phone-container {
+          height: 100vh;
+          max-height: none;
+          border-radius: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone-container">
+      <!-- WhatsApp Header -->
+      <div class="wa-header">
+        <a href="index.html" class="back-btn">←</a>
+        <div class="contact-avatar">L</div>
+        <div class="contact-info">
+          <div class="contact-name">LogiCompliance</div>
+          <div class="contact-status">online</div>
+        </div>
+        <div class="header-icons">
+          <span>📹</span>
+          <span>📞</span>
+          <span>⋮</span>
+        </div>
+      </div>
+
+      <!-- Language Selector -->
+      <div class="language-bar">
+        <button class="lang-btn active" onclick="setLanguage('en')">
+          English
+        </button>
+        <button class="lang-btn" onclick="setLanguage('hi')">हिंदी</button>
+        <button class="lang-btn" onclick="setLanguage('bn')">বাংলা</button>
+        <button class="lang-btn" onclick="setLanguage('ta')">தமிழ்</button>
+      </div>
+
+      <!-- Chat Area -->
+      <div class="chat-area" id="chatArea">
+        <!-- Messages will be added here -->
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-area">
+        <div class="input-icons">
+          <span>😊</span>
+        </div>
+        <input
+          type="text"
+          class="message-input"
+          placeholder="Type a message"
+          id="messageInput"
+        />
+        <div class="input-icons">
+          <span onclick="document.getElementById('fileInput').click()">📎</span>
+          <span onclick="document.getElementById('cameraInput').click()"
+            >📷</span
+          >
+        </div>
+        <button class="send-btn" onclick="sendMessage()">➤</button>
+      </div>
+
+      <!-- Hidden File Inputs -->
+      <input
+        type="file"
+        id="fileInput"
+        class="hidden-input"
+        accept="image/*"
+        onchange="handleFileUpload(event)"
+      />
+      <input
+        type="file"
+        id="cameraInput"
+        class="hidden-input"
+        accept="image/*"
+        capture="camera"
+        onchange="handleFileUpload(event)"
+      />
+
+      <!-- Success Overlay -->
+      <div class="success-overlay" id="successOverlay">
+        <div class="success-content">
+          <div class="success-icon">✅</div>
+          <div class="success-title" id="successTitle">
+            Documents Submitted!
+          </div>
+          <div class="success-subtitle" id="successSubtitle">
+            Your documents have been verified successfully.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Demo Controls -->
+    <div class="demo-controls">
+      <h4>🎮 Demo Controls</h4>
+      <button class="demo-btn primary" onclick="startDemo('patient')">
+        Start Patient Demo
+      </button>
+      <button class="demo-btn primary" onclick="startDemo('phlebo')">
+        Start Phlebo Demo
+      </button>
+      <button class="demo-btn secondary" onclick="resetDemo()">Reset</button>
+      <button class="demo-btn secondary" onclick="simulateReminder()">
+        Send Reminder
+      </button>
+      <p style="font-size: 0.75rem; color: #888; margin-top: 10px">
+        This simulates the WhatsApp experience for patients/flebos
+      </p>
+    </div>
+
+    <script>
+      // Translations
+      const translations = {
+        en: {
+          welcome:
+            "🏥 Welcome to LogiCompliance!\n\nYour sample collection is scheduled for today.\n\nOrder ID: ORD-2026-0156",
+          instructions:
+            "📋 Please provide the following documents:\n\n1️⃣ Test Request Form (TRF)\n2️⃣ Doctor's Prescription (Rx)\n3️⃣ Previous Reports (if any)\n\nYou can take photos and send them here.",
+          uploadPrompt: "Please upload your documents using the buttons below:",
+          uploadSuccess: "✅ Document received! Thank you.",
+          allDocsReceived:
+            "🎉 All documents received!\n\nNow we need your consent to proceed.",
+          consentPrompt:
+            "📱 For digital consent, we'll send an OTP to your registered mobile number.\n\nReply 'YES' to receive the OTP.",
+          phleboConsentPrompt:
+            "📱 For digital consent, we'll send an OTP to customer's registered mobile number.\n\nReply 'YES' to send the OTP.",
+          otpSent:
+            "🔐 OTP sent to +91 98XXX XX210\n\nPlease enter the 4-digit code below:",
+          otpVerified:
+            "✅ OTP Verified Successfully!\n\nYour consent has been recorded.\n\nOur phlebotomist will arrive shortly.",
+          reminder:
+            "⏰ Reminder: We're still waiting for your documents.\n\nPlease upload them to avoid delays in your sample collection.",
+          incentiveMsg:
+            "💰 Great job! This pickup is now compliant. ₹50 incentive credited to your account.",
+          thankYou: "Thank you for using LogiCompliance! 🙏",
+        },
+        hi: {
+          welcome:
+            "🏥 LogiCompliance में आपका स्वागत है!\n\nआपका सैंपल कलेक्शन आज के लिए शेड्यूल है।\n\nऑर्डर ID: ORD-2026-0156",
+          instructions:
+            "📋 कृपया निम्नलिखित दस्तावेज़ प्रदान करें:\n\n1️⃣ टेस्ट रिक्वेस्ट फॉर्म (TRF)\n2️⃣ डॉक्टर का प्रिस्क्रिप्शन\n3️⃣ पिछली रिपोर्ट (यदि कोई हो)\n\nआप फोटो लेकर यहाँ भेज सकते हैं।",
+          uploadPrompt:
+            "कृपया नीचे दिए गए बटन का उपयोग करके अपने दस्तावेज़ अपलोड करें:",
+          uploadSuccess: "✅ दस्तावेज़ प्राप्त हुआ! धन्यवाद।",
+          allDocsReceived:
+            "🎉 सभी दस्तावेज़ प्राप्त हुए!\n\nअब आगे बढ़ने के लिए हमें आपकी सहमति चाहिए।",
+          consentPrompt:
+            "📱 डिजिटल सहमति के लिए, हम आपके पंजीकृत मोबाइल नंबर पर OTP भेजेंगे।\n\nOTP प्राप्त करने के लिए 'हाँ' लिखें।",
+          phleboConsentPrompt:
+            "📱 डिजिटल सहमति के लिए, हम ग्राहक के पंजीकृत मोबाइल नंबर पर OTP भेजेंगे।\n\nOTP भेजने के लिए 'हाँ' लिखें।",
+          otpSent:
+            "🔐 OTP भेजा गया +91 98XXX XX210\n\nकृपया नीचे 4 अंकों का कोड दर्ज करें:",
+          otpVerified:
+            "✅ OTP सफलतापूर्वक सत्यापित!\n\nआपकी सहमति दर्ज की गई है।\n\nहमारे फ्लेबोटोमिस्ट जल्द आएंगे।",
+          reminder:
+            "⏰ रिमाइंडर: हम अभी भी आपके दस्तावेज़ों की प्रतीक्षा कर रहे हैं।\n\nकृपया उन्हें अपलोड करें।",
+          incentiveMsg:
+            "💰 बहुत बढ़िया! यह पिकअप अब अनुपालन में है। ₹50 प्रोत्साहन राशि जमा की गई।",
+          thankYou: "LogiCompliance का उपयोग करने के लिए धन्यवाद! 🙏",
+        },
+        bn: {
+          welcome:
+            "🏥 LogiCompliance-এ স্বাগতম!\n\nআপনার নমুনা সংগ্রহ আজকের জন্য নির্ধারিত।\n\nঅর্ডার ID: ORD-2026-0156",
+          instructions:
+            "📋 অনুগ্রহ করে নিম্নলিখিত নথি প্রদান করুন:\n\n1️⃣ টেস্ট রিকোয়েস্ট ফর্ম (TRF)\n2️⃣ ডাক্তারের প্রেসক্রিপশন\n3️⃣ আগের রিপোর্ট (যদি থাকে)\n\nআপনি ছবি তুলে এখানে পাঠাতে পারেন।",
+          uploadPrompt:
+            "অনুগ্রহ করে নীচের বোতাম ব্যবহার করে আপনার নথি আপলোড করুন:",
+          uploadSuccess: "✅ নথি প্রাপ্ত হয়েছে! ধন্যবাদ।",
+          allDocsReceived:
+            "🎉 সব নথি প্রাপ্ত হয়েছে!\n\nএখন এগিয়ে যেতে আপনার সম্মতি প্রয়োজন।",
+          consentPrompt:
+            "📱 ডিজিটাল সম্মতির জন্য, আমরা আপনার নিবন্ধিত মোবাইল নম্বরে OTP পাঠাব।\n\nOTP পেতে 'হ্যাঁ' লিখুন।",
+          phleboConsentPrompt:
+            "📱 ডিজিটাল সম্মতির জন্য, আমরা গ্রাহকের নিবন্ধিত মোবাইল নম্বরে OTP পাঠাব।\n\nOTP পাঠাতে 'হ্যাঁ' লিখুন।",
+          otpSent:
+            "🔐 OTP পাঠানো হয়েছে +91 98XXX XX210\n\nঅনুগ্রহ করে নীচে 4 সংখ্যার কোড দিন:",
+          otpVerified:
+            "✅ OTP সফলভাবে যাচাই করা হয়েছে!\n\nআপনার সম্মতি রেকর্ড করা হয়েছে।\n\nআমাদের ফ্লেবোটমিস্ট শীঘ্রই আসবেন।",
+          reminder:
+            "⏰ মনে করিয়ে দিচ্ছি: আমরা এখনও আপনার নথির জন্য অপেক্ষা করছি।\n\nঅনুগ্রহ করে সেগুলি আপলোড করুন।",
+          incentiveMsg:
+            "💰 চমৎকার! এই পিকআপ এখন সম্মতিতে আছে। ₹50 প্রণোদনা জমা হয়েছে।",
+          thankYou: "LogiCompliance ব্যবহার করার জন্য ধন্যবাদ! 🙏",
+        },
+        ta: {
+          welcome:
+            "🏥 LogiCompliance-க்கு வரவேற்கிறோம்!\n\nஉங்கள் மாதிரி சேகரிப்பு இன்றைக்கு திட்டமிடப்பட்டுள்ளது.\n\nஆர்டர் ID: ORD-2026-0156",
+          instructions:
+            "📋 பின்வரும் ஆவணங்களை வழங்கவும்:\n\n1️⃣ சோதனை கோரிக்கை படிவம் (TRF)\n2️⃣ மருத்துவர் மருந்து சீட்டு\n3️⃣ முந்தைய அறிக்கைகள் (இருந்தால்)\n\nநீங்கள் புகைப்படம் எடுத்து இங்கே அனுப்பலாம்.",
+          uploadPrompt:
+            "கீழே உள்ள பொத்தான்களைப் பயன்படுத்தி உங்கள் ஆவணங்களை பதிவேற்றவும்:",
+          uploadSuccess: "✅ ஆவணம் பெறப்பட்டது! நன்றி.",
+          allDocsReceived:
+            "🎉 அனைத்து ஆவணங்களும் பெறப்பட்டன!\n\nதொடர உங்கள் ஒப்புதல் தேவை.",
+          consentPrompt:
+            "📱 டிஜிட்டல் ஒப்புதலுக்கு, உங்கள் பதிவு செய்த கைபேசி எண்ணுக்கு OTP அனுப்புவோம்.\n\nOTP பெற 'ஆம்' என்று பதிலளிக்கவும்.",
+          phleboConsentPrompt:
+            "📱 டிஜிட்டல் ஒப்புதலுக்கு, வாடிக்கையாளரின் பதிவு செய்த கைபேசி எண்ணுக்கு OTP அனுப்புவோம்.\n\nOTP அனுப்ப 'ஆம்' என்று பதிலளிக்கவும்.",
+          otpSent:
+            "🔐 OTP அனுப்பப்பட்டது +91 98XXX XX210\n\nகீழே 4 இலக்க குறியீட்டை உள்ளிடவும்:",
+          otpVerified:
+            "✅ OTP வெற்றிகரமாக சரிபார்க்கப்பட்டது!\n\nஉங்கள் ஒப்புதல் பதிவு செய்யப்பட்டது.\n\nஎங்கள் ப்ளெபோடோமிஸ்ட் விரைவில் வருவார்.",
+          reminder:
+            "⏰ நினைவூட்டல்: உங்கள் ஆவணங்களுக்காக காத்திருக்கிறோம்.\n\nதாமதத்தை தவிர்க்க அவற்றை பதிவேற்றவும்.",
+          incentiveMsg:
+            "💰 நன்று! இந்த பிக்அப் இப்போது இணக்கமானது. ₹50 ஊக்கத்தொகை வரவு வைக்கப்பட்டது.",
+          thankYou: "LogiCompliance பயன்படுத்தியதற்கு நன்றி! 🙏",
+        },
+      };
+
+      let currentLang = "en";
+      let demoStep = 0;
+      let demoMode = "patient"; // 'patient' or 'phlebo'
+      let uploadedDocs = { trf: false, rx: false, reports: false };
+
+      function setLanguage(lang) {
+        currentLang = lang;
+        document
+          .querySelectorAll(".lang-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+      }
+
+      function addMessage(text, type = "received", delay = 0) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            const chatArea = document.getElementById("chatArea");
+            const msg = document.createElement("div");
+            msg.className = `message ${type}`;
+
+            const time = new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            const tick = type === "sent" ? '<span class="tick">✓✓</span>' : "";
+
+            msg.innerHTML = `
+                        ${text.replace(/\n/g, "<br>")}
+                        <div class="message-time">${time} ${tick}</div>
+                    `;
+            chatArea.appendChild(msg);
+            chatArea.scrollTop = chatArea.scrollHeight;
+            resolve();
+          }, delay);
+        });
+      }
+
+      function addSystemMessage(text) {
+        const chatArea = document.getElementById("chatArea");
+        const msg = document.createElement("div");
+        msg.className = "system-message";
+        msg.textContent = text;
+        chatArea.appendChild(msg);
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }
+
+      function addTypingIndicator() {
+        const chatArea = document.getElementById("chatArea");
+        const typing = document.createElement("div");
+        typing.className = "message received";
+        typing.id = "typingIndicator";
+        typing.innerHTML = `
+                <div class="typing-indicator">
+                    <span></span><span></span><span></span>
+                </div>
+            `;
+        chatArea.appendChild(typing);
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }
+
+      function removeTypingIndicator() {
+        const typing = document.getElementById("typingIndicator");
+        if (typing) typing.remove();
+      }
+
+      function addUploadSection() {
+        const chatArea = document.getElementById("chatArea");
+        const section = document.createElement("div");
+        section.className = "message received";
+        section.innerHTML = `
+                <div class="upload-section">
+                    <div class="upload-title">📎 Upload Documents</div>
+                    <div class="upload-grid">
+                        <div class="upload-item ${uploadedDocs.trf ? "uploaded" : ""}" onclick="uploadDocument('trf')">
+                            <div class="icon">${uploadedDocs.trf ? "✅" : "📄"}</div>
+                            <div class="label">TRF</div>
+                        </div>
+                        <div class="upload-item ${uploadedDocs.rx ? "uploaded" : ""}" onclick="uploadDocument('rx')">
+                            <div class="icon">${uploadedDocs.rx ? "✅" : "💊"}</div>
+                            <div class="label">Prescription</div>
+                        </div>
+                        <div class="upload-item ${uploadedDocs.reports ? "uploaded" : ""}" onclick="uploadDocument('reports')">
+                            <div class="icon">${uploadedDocs.reports ? "✅" : "📋"}</div>
+                            <div class="label">Reports</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        chatArea.appendChild(section);
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }
+
+      function addProgressSection() {
+        const chatArea = document.getElementById("chatArea");
+        const section = document.createElement("div");
+        section.className = "message received";
+        section.id = "progressSection";
+        section.innerHTML = `
+                <div class="progress-section">
+                    <div class="progress-title">📊 Submission Progress</div>
+                    <div class="progress-steps">
+                        <div class="progress-step">
+                            <div class="step-circle ${demoStep >= 1 ? "completed" : ""}">1</div>
+                            <div class="step-label">Order<br>Created</div>
+                        </div>
+                        <div class="progress-step">
+                            <div class="step-circle ${demoStep >= 2 ? "completed" : demoStep === 1 ? "active" : ""}">2</div>
+                            <div class="step-label">Docs<br>Upload</div>
+                        </div>
+                        <div class="progress-step">
+                            <div class="step-circle ${demoStep >= 3 ? "completed" : demoStep === 2 ? "active" : ""}">3</div>
+                            <div class="step-label">OTP<br>Consent</div>
+                        </div>
+                        <div class="progress-step">
+                            <div class="step-circle ${demoStep >= 4 ? "completed" : demoStep === 3 ? "active" : ""}">4</div>
+                            <div class="step-label">Complete</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        chatArea.appendChild(section);
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }
+
+      function addOTPSection() {
+        const chatArea = document.getElementById("chatArea");
+        const section = document.createElement("div");
+        section.className = "message received";
+        section.innerHTML = `
+                <div class="otp-section">
+                    <div class="otp-title">🔐 Enter OTP for Digital Consent</div>
+                    <div class="otp-input-group">
+                        <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 1)">
+                        <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 2)">
+                        <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 3)">
+                        <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 4)">
+                    </div>
+                    <div class="otp-timer">OTP expires in <span id="otpTimer">02:00</span></div>
+                    <button class="verify-btn" onclick="verifyOTP()">Verify & Give Consent</button>
+                </div>
+            `;
+        chatArea.appendChild(section);
+        chatArea.scrollTop = chatArea.scrollHeight;
+        startOTPTimer();
+      }
+
+      function moveToNext(input, index) {
+        if (input.value.length === 1 && index < 4) {
+          const inputs = document.querySelectorAll(".otp-input");
+          inputs[index].focus();
+        }
+      }
+
+      let otpTimerInterval;
+      function startOTPTimer() {
+        let time = 120;
+        otpTimerInterval = setInterval(() => {
+          time--;
+          const mins = Math.floor(time / 60);
+          const secs = time % 60;
+          const timerEl = document.getElementById("otpTimer");
+          if (timerEl) {
+            timerEl.textContent = `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+          }
+          if (time <= 0) clearInterval(otpTimerInterval);
+        }, 1000);
+      }
+
+      async function uploadDocument(type) {
+        uploadedDocs[type] = true;
+
+        // Simulate sending a photo
+        await addMessage("📷 [Photo uploaded]", "sent");
+
+        addTypingIndicator();
+        await new Promise((r) => setTimeout(r, 1000));
+        removeTypingIndicator();
+
+        await addMessage(translations[currentLang].uploadSuccess);
+
+        // Check if all docs are uploaded
+        if (uploadedDocs.trf && uploadedDocs.rx && uploadedDocs.reports) {
+          demoStep = 2;
+          updateProgress();
+
+          addTypingIndicator();
+          await new Promise((r) => setTimeout(r, 1500));
+          removeTypingIndicator();
+
+          await addMessage(translations[currentLang].allDocsReceived);
+
+          // Use different consent prompt based on demo mode
+          const consentMsg =
+            demoMode === "phlebo"
+              ? translations[currentLang].phleboConsentPrompt ||
+                translations[currentLang].consentPrompt
+              : translations[currentLang].consentPrompt;
+          await addMessage(consentMsg, "received", 1000);
+
+          // Add quick reply
+          addQuickReplies(["YES", "हाँ", "হ্যাঁ", "ஆம்"]);
+        } else {
+          addUploadSection();
+        }
+      }
+
+      function addQuickReplies(options) {
+        const chatArea = document.getElementById("chatArea");
+        const section = document.createElement("div");
+        section.className = "quick-replies";
+        section.id = "quickReplies";
+        section.innerHTML = options
+          .map(
+            (opt) =>
+              `<button class="quick-reply-btn" onclick="handleQuickReply('${opt}')">${opt}</button>`,
+          )
+          .join("");
+        chatArea.appendChild(section);
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }
+
+      async function handleQuickReply(reply) {
+        document.getElementById("quickReplies")?.remove();
+        await addMessage(reply, "sent");
+
+        addTypingIndicator();
+        await new Promise((r) => setTimeout(r, 1500));
+        removeTypingIndicator();
+
+        await addMessage(translations[currentLang].otpSent);
+        addOTPSection();
+      }
+
+      async function verifyOTP() {
+        const inputs = document.querySelectorAll(".otp-input");
+        const otp = Array.from(inputs)
+          .map((i) => i.value)
+          .join("");
+
+        if (otp.length === 4) {
+          clearInterval(otpTimerInterval);
+          demoStep = 4;
+          updateProgress();
+
+          await addMessage(otp, "sent");
+
+          addTypingIndicator();
+          await new Promise((r) => setTimeout(r, 1500));
+          removeTypingIndicator();
+
+          // Show OTP verified message based on mode
+          if (demoMode === "patient") {
+            // Patient flow: show phlebotomist arrival message, no incentive
+            await addMessage(translations[currentLang].otpVerified);
+          } else {
+            // Phlebo flow: show incentive message, no phlebotomist arrival
+            const otpVerifiedNoArrival = translations[currentLang].otpVerified
+              .replace("\n\nOur phlebotomist will arrive shortly.", "")
+              .replace("\n\nहमारे फ्लेबोटोमिस्ट जल्द आएंगे।", "")
+              .replace("\n\nআমাদের ফ্লেবোটমিস্ট শীঘ্রই আসবেন।", "")
+              .replace("\n\nஎங்கள் ப்ளெபோடோமிஸ்ட் விரைவில் வருவார்.", "");
+            await addMessage(otpVerifiedNoArrival);
+            await addMessage(
+              translations[currentLang].incentiveMsg,
+              "received",
+              1000,
+            );
+          }
+
+          await addMessage(
+            translations[currentLang].thankYou,
+            "received",
+            1000,
+          );
+
+          // Show success
+          showSuccess(
+            "Documents Verified!",
+            "All documents and consent have been recorded. Your order is complete.",
+          );
+        }
+      }
+
+      function updateProgress() {
+        document.getElementById("progressSection")?.remove();
+        addProgressSection();
+      }
+
+      function showSuccess(title, subtitle) {
+        document.getElementById("successTitle").textContent = title;
+        document.getElementById("successSubtitle").textContent = subtitle;
+        document.getElementById("successOverlay").classList.add("active");
+
+        setTimeout(() => {
+          document.getElementById("successOverlay").classList.remove("active");
+        }, 3000);
+      }
+
+      function sendMessage() {
+        const input = document.getElementById("messageInput");
+        const text = input.value.trim();
+        if (text) {
+          addMessage(text, "sent");
+          input.value = "";
+
+          // Auto response for certain keywords
+          if (
+            text.toLowerCase().includes("yes") ||
+            text.toLowerCase().includes("हाँ") ||
+            text.toLowerCase().includes("হ্যাঁ") ||
+            text.toLowerCase().includes("ஆம்")
+          ) {
+            handleQuickReply(text);
+          }
+        }
+      }
+
+      function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+          addMessage("📷 [Photo uploaded]", "sent");
+
+          // Simulate OCR processing
+          setTimeout(() => {
+            addTypingIndicator();
+            setTimeout(() => {
+              removeTypingIndicator();
+              addMessage(
+                "📄 Document received! Analyzing with OCR...\n\n✅ Patient Name: Detected\n✅ Date: Detected\n✅ Doctor Details: Detected",
+                "received",
+              );
+            }, 1500);
+          }, 500);
+        }
+      }
+
+      // Demo Control Functions
+      async function startDemo(mode = "patient") {
+        resetDemo();
+        demoMode = mode;
+        demoStep = 1;
+
+        addSystemMessage("Today");
+
+        await addMessage(translations[currentLang].welcome, "received", 500);
+        await addMessage(
+          translations[currentLang].instructions,
+          "received",
+          1500,
+        );
+
+        addProgressSection();
+        addUploadSection();
+      }
+
+      function resetDemo() {
+        document.getElementById("chatArea").innerHTML = "";
+        demoStep = 0;
+        uploadedDocs = { trf: false, rx: false, reports: false };
+        clearInterval(otpTimerInterval);
+      }
+
+      async function simulateReminder() {
+        addTypingIndicator();
+        await new Promise((r) => setTimeout(r, 1000));
+        removeTypingIndicator();
+        await addMessage(translations[currentLang].reminder);
+      }
+
+      // Enter key to send
+      document
+        .getElementById("messageInput")
+        .addEventListener("keypress", (e) => {
+          if (e.key === "Enter") sendMessage();
+        });
+
+      // Start with welcome message
+      window.onload = () => {
+        addSystemMessage(
+          'Tap "Start Patient Demo" or "Start Phlebo Demo" to begin',
+        );
+      };
+    </script>
+  </body>
+</html>
